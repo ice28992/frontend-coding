@@ -30,12 +30,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* スマートフォン用 (ベース) */
+/* ベース */
 body {
   line-height: 1.5;
 }
 
-/* タブレット用 */
+/* スマホ用 */
 @media (min-width: 640px) {
   body {
     line-height: 1.5;
