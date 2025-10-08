@@ -1,9 +1,10 @@
 'use client';
+import { PrefectureList } from '@/components/PrefectureList';
 
 export default function App() {
   return (
     <div className="root-layout">
-      <h1>フロントエンド</h1>
+      <PrefectureList />
     </div>
   );
 }
