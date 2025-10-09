@@ -7,13 +7,17 @@ type Prefecture = {
   prefName: string;
 };
 
+type SelectTabProps = {
+  selecteTab: 'total' | 'young' | 'productive' | 'elderly';
+};
+
 // APIから都道府県一覧の取得
 const getPrefData = async () => {
   const response = await fetch(
-    'URL',
+    'https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures',
     {
       headers: {
-        'X-API-KEY': '***',
+        'X-API-KEY': '8FzX5qLmN3wRtKjH7vCyP9bGdEaU4sYpT6cMfZnJ',
       },
     }
   );
@@ -21,10 +25,25 @@ const getPrefData = async () => {
   return data.result;
 };
 
-export function PrefectureList() {
+export function PrefectureList({ selecteTab }: SelectTabProps) {
   const [pref, setPref] = useState<Prefecture[]>([]);
   const [selectPref, setSelectPref] = useState<number[]>([]);
-  
+
+  // タブごとにカードの色変える
+  const switchColor = () => {
+    switch (selecteTab) {
+      case 'total':
+        return styles.RedTab;
+      case 'young':
+        return styles.BlueTab;
+      case 'productive':
+        return styles.GreenTab;
+      case 'elderly':
+        return styles.YellowTab;
+      default:
+        return '';
+    }
+  };
 
   // API呼び出し
   useEffect(() => {
@@ -60,8 +79,7 @@ export function PrefectureList() {
   };
 
   return (
-    <div className={styles.prefCard}>
-      
+    <div className={`${styles.prefCard} ${switchColor()}`}>
       <div className={styles.prefCardHead}>
         <h2 className={styles.textBox}>都道府県一覧</h2>
       
