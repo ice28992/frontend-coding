@@ -24,7 +24,9 @@
   padding: 2px;
   width: 90px;
   cursor: pointer;
+  color: #4b4848;
   font-size: small;
+  font-weight: bold;
 }
 .checkAll:hover {
   background-color: #adccd6;
@@ -37,6 +39,8 @@
   border: 1px #5d57598d solid;
   border-radius: 5px;
   background-color: #adccd6;
+  color: #4b4848;
+  font-weight: bold;
 }
 
 .prefGrid {
