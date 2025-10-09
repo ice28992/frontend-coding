@@ -3,10 +3,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import styles from './Chart.module.css';
 
 type Props = {
+  className?: string;
   selectedPrefCodes: number[];
   selectedTab: number;
+  boderColor: string;
 };
 
 type Prefecture = {
@@ -16,7 +19,7 @@ type Prefecture = {
 
 const populationLabels = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
 
-function Chart({ selectedPrefCodes, selectedTab }: Props) {
+function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props) {
   const [options, setOptions] = useState<Highcharts.Options | null>(null);
   const [prefMap, setPrefMap] = useState<Record<number, string>>({});
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
@@ -100,6 +103,9 @@ function Chart({ selectedPrefCodes, selectedTab }: Props) {
             layout: 'horizontal',
             align: 'center',
             verticalAlign: 'bottom',
+            itemStyle: { 
+              fontSize: '10px'
+            },
           },
         });
       } catch (error) {
@@ -113,7 +119,15 @@ function Chart({ selectedPrefCodes, selectedTab }: Props) {
 
   if (!options) return <p>グラフを表示するには都道府県を選択してください</p>;
 
-  return <HighchartsReact highcharts={Highcharts} options={options} ref={chartComponentRef} />;
+  return (
+    <div className={`${styles.wrapper} ${className ?? ''} ${boderColor}`}>
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+        ref={chartComponentRef}
+      />
+    </div>
+  );
 }
 
 export default Chart;

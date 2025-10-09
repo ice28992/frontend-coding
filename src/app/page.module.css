@@ -1,0 +1,12 @@
+.card {
+  border: 8px solid;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  background-color: #fff;
+}
+
+.card-red { border-color: #C58B84; }
+.card-blue { border-color: #84BEC5; }
+.card-green { border-color: #84AF55; }
+.card-yellow { border-color: #F5A623; }
