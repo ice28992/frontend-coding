@@ -1,18 +1,28 @@
-'use client';
-
 import { useState } from 'react';
 import styles from './SwitchTabs.module.css';
 import { PrefectureList } from '../prefctureList/PrefectureList';
 
-const SwitchTabs = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
+type Props = {
+  checkPrefs: (selected: number[]) => void;
+  selectedTabs: number;
+  setSelectedTabs: (id: number) => void;
+};
+
+
+const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs } : Props) => {
+  const [selectedPrefs, setSelectedPrefs] = useState<number[]>([]);
 
   const handleSwitchTab = (id: number) => {
-    setSelectedTab(id);
+    setSelectedTabs(id);
+  };
+
+  const handleSelect = (selected: number[]) => {
+    setSelectedPrefs(selected);
+    checkPrefs(selected);
   };
 
   const tabColor = () => {
-    switch (selectedTab) {
+    switch (selectedTabs) {
       case 0: return styles['card-red'];
       case 1: return styles['card-blue'];
       case 2: return styles['card-green'];
@@ -34,7 +44,7 @@ const SwitchTabs = () => {
 
         {/* Card */}
         <div className={`${styles.card} ${tabColor()}`}>
-          <PrefectureList selectedTab={selectedTab} />
+          <PrefectureList selectChange={handleSelect} />
         </div>
       </div>
     </div>

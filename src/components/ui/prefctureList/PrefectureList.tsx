@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 import styles from './PrefectureList.module.css';
 
@@ -7,8 +6,8 @@ type Prefecture = {
   prefName: string;
 };
 
-type PrefectureListProps = {
-  selectedTab: number;
+type Props = {
+  selectChange: (selected: number[]) => void;
 };
 
 const getPrefData = async () => {
@@ -24,22 +23,26 @@ const getPrefData = async () => {
   return data.result;
 };
 
-export function PrefectureList({ selectedTab }: PrefectureListProps) {
+export function PrefectureList({ selectChange } : Props) {
   const [pref, setPref] = useState<Prefecture[]>([]);
   const [selectPref, setSelectPref] = useState<number[]>([]);
   const [allSelecte, setAllSelecte] = useState(false);
 
   useEffect(() => {
-    const fetchPref = async () => {
+    const getPref = async () => {
       try {
         const data = await getPrefData();
         setPref(data);
       } catch (error) {
-        console.error('都道府県の取得に失敗しました', error);
+        console.error('都道府県データの取得に失敗しました', error);
       }
     };
-    fetchPref();
+    getPref();
   }, []);
+
+  useEffect(() => {
+    selectChange(selectPref);
+  }, [selectPref, selectChange]);
 
   const handleCheckAll = () => {
     if (allSelecte) {
