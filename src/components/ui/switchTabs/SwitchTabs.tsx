@@ -1,40 +1,44 @@
 'use client';
 
-type SwitchTabsProps = {
-  selecteTab: 'total' | 'young' | 'productive' | 'elderly';
-  setSelecteTab: (tab: 'total' | 'young' | 'productive' | 'elderly') => void;
-};
+import { useState } from 'react';
+import styles from './SwitchTabs.module.css';
+import { PrefectureList } from '../prefctureList/PrefectureList';
 
-export default function SwitchTabs({ selecteTab, setSelecteTab }: SwitchTabsProps) {
-  // ボタンの背景色を返す関数
-  const getTabBgColor = (key: string) => {
-    if (key === 'total') return 'bg-red-300';
-    if (key === 'young') return 'bg-blue-300';
-    if (key === 'productive') return 'bg-green-300';
-    if (key === 'elderly') return 'bg-yellow-300';
-    return '';
+const SwitchTabs = () => {
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  const handleSwitchTab = (id: number) => {
+    setSelectedTab(id);
+  };
+
+  const tabColor = () => {
+    switch (selectedTab) {
+      case 0: return styles['card-red'];
+      case 1: return styles['card-blue'];
+      case 2: return styles['card-green'];
+      case 3: return styles['card-yellow'];
+      default: return '';
+    }
   };
 
   return (
-    <div className="p-4">
-      <div className="flex space-x-2 mb-4">
-        {(['total', 'young', 'productive', 'elderly'] as const).map((key) => (
-          <button
-            key={key}
-            onClick={() => setSelecteTab(key)}
-            className={`px-4 py-2 rounded-t font-bold ${getTabBgColor(key)} ${
-              selecteTab === key ? 'opacity-100' : 'opacity-60'
-            }`}
-          >
-            {{
-              total: '総人口',
-              young: '年少人口',
-              productive: '生産年齢人口',
-              elderly: '老年人口',
-            }[key]}
-          </button>
-        ))}
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        {/* Tab */}
+        <div className={styles.tabs}>
+          <button className={`${styles.tab} ${styles['tab-red']}`} onClick={() => handleSwitchTab(0)}>総人口</button>
+          <button className={`${styles.tab} ${styles['tab-blue']}`} onClick={() => handleSwitchTab(1)}>年少人口</button>
+          <button className={`${styles.tab} ${styles['tab-green']}`} onClick={() => handleSwitchTab(2)}>生産年齢人口</button>
+          <button className={`${styles.tab} ${styles['tab-yellow']}`} onClick={() => handleSwitchTab(3)}>老年人口</button>
+        </div>
+
+        {/* Card */}
+        <div className={`${styles.card} ${tabColor()}`}>
+          <PrefectureList selectedTab={selectedTab} />
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default SwitchTabs;

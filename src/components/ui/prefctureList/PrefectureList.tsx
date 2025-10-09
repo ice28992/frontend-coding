@@ -7,14 +7,13 @@ type Prefecture = {
   prefName: string;
 };
 
-type SelectTabProps = {
-  selecteTab: 'total' | 'young' | 'productive' | 'elderly';
+type PrefectureListProps = {
+  selectedTab: number;
 };
 
-// APIから都道府県一覧の取得
 const getPrefData = async () => {
   const response = await fetch(
-    '***',
+    'URL',
     {
       headers: {
         'X-API-KEY': '***',
@@ -25,27 +24,11 @@ const getPrefData = async () => {
   return data.result;
 };
 
-export function PrefectureList({ selecteTab }: SelectTabProps) {
+export function PrefectureList({ selectedTab }: PrefectureListProps) {
   const [pref, setPref] = useState<Prefecture[]>([]);
   const [selectPref, setSelectPref] = useState<number[]>([]);
+  const [allSelecte, setAllSelecte] = useState(false);
 
-  // タブごとにカードの色変える
-  const switchColor = () => {
-    switch (selecteTab) {
-      case 'total':
-        return styles.RedTab;
-      case 'young':
-        return styles.BlueTab;
-      case 'productive':
-        return styles.GreenTab;
-      case 'elderly':
-        return styles.YellowTab;
-      default:
-        return '';
-    }
-  };
-
-  // API呼び出し
   useEffect(() => {
     const fetchPref = async () => {
       try {
@@ -58,8 +41,6 @@ export function PrefectureList({ selecteTab }: SelectTabProps) {
     fetchPref();
   }, []);
 
-  // 全選択/全解除処理
-  const [allSelecte, setAllSelecte] = useState(false);
   const handleCheckAll = () => {
     if (allSelecte) {
       setSelectPref([]);
@@ -69,7 +50,6 @@ export function PrefectureList({ selecteTab }: SelectTabProps) {
     setAllSelecte(!allSelecte);
   };
 
-  // 都道府県選択時の処理
   const handlePrefChange = (prefCode: number) => {
     setSelectPref((prev) =>
       prev.includes(prefCode)
@@ -79,16 +59,14 @@ export function PrefectureList({ selecteTab }: SelectTabProps) {
   };
 
   return (
-    <div className={`${styles.prefCard} ${switchColor()}`}>
+    <div>
       <div className={styles.prefCardHead}>
         <h2 className={styles.textBox}>都道府県一覧</h2>
-      
         <button onClick={handleCheckAll} className={styles.checkAll}>
           {allSelecte ? '全解除' : '全選択'}
         </button>
       </div>
 
-      {/* 都道府県のチェックボックス表示 */}
       <div className={styles.prefGrid}>
         {pref.map((p) => (
           <label key={p.prefCode} className={styles.prefCheckbox}>
