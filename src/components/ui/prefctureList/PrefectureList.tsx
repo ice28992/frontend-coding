@@ -14,10 +14,10 @@ type SelectTabProps = {
 // APIから都道府県一覧の取得
 const getPrefData = async () => {
   const response = await fetch(
-    'https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures',
+    '***',
     {
       headers: {
-        'X-API-KEY': '8FzX5qLmN3wRtKjH7vCyP9bGdEaU4sYpT6cMfZnJ',
+        'X-API-KEY': '***',
       },
     }
   );
