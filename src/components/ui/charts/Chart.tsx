@@ -17,7 +17,24 @@ type Prefecture = {
   prefName: string;
 };
 
-const populationLabels = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
+// 型定義(エラー防止)
+type DataPoint = {
+  year: number;
+  value: number;
+};
+type CategoryData = {
+  label: string;
+  data: DataPoint[];
+};
+type ApiResponse = {
+  message: null;
+  result: {
+    boundaryYear: number;
+    data: CategoryData[];
+  };
+};
+
+const tabLabels = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
 
 function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props) {
   const [options, setOptions] = useState<Highcharts.Options | null>(null);
@@ -49,14 +66,14 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
 
   // グラフデータ取得
   useEffect(() => {
-    if (selectedPrefCodes.length === 0 || Object.keys(prefMap).length === 0) {
+    if (selectedPrefCodes.length == 0 || Object.keys(prefMap).length == 0) {
       setOptions(null);
       return;
     }
 
     const fetchData = async () => {
       try {
-        const promises = selectedPrefCodes.map(async (prefCode) => {
+        const promises = selectedPrefCodes.map(async (prefCode) : Promise<{ prefCode: number; data: ApiResponse }> => {
           const response = await fetch(
             `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
             {
@@ -73,8 +90,8 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
 
         const results = await Promise.all(promises);
 
-        const labelToShow = populationLabels[selectedTab];
-        const categories = results[0].data.result.data[0].data.map((pt: any) => pt.year.toString());
+        const labelToShow = tabLabels[selectedTab];
+        const categories = results[0].data.result.data[0].data.map((pt) => pt.year.toString());
 
         const series = results.map(({ prefCode, data }) => {
           const targetData = data.result.data.find((d) => d.label === labelToShow);
@@ -85,7 +102,7 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
             type: 'line',
             data: targetData.data.map((pt) => pt.value),
           };
-        }).filter(Boolean);
+        })
 
         setOptions({
           title: {
