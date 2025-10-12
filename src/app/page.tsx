@@ -1,5 +1,3 @@
-// page.tsx
-
 'use client';
 
 import { useState } from 'react';
@@ -10,13 +8,13 @@ import styles from '@/app/page.module.css';
 export default function Page() {
   const [selectedPrefs, setSelectedPrefs] = useState<number[]>([]);
   const [selectedTabs, setSelectedTabs] = useState<number>(0);
-  const borderClassMap = [
+  const boderColor = [
     styles['card-red'],
     styles['card-blue'],
     styles['card-green'],
     styles['card-yellow'],
   ];
-  const borderColorClass = borderClassMap[selectedTabs] || '';
+  const borderClass = boderColor[selectedTabs] || '';
 
   return (
     <main>
@@ -29,7 +27,7 @@ export default function Page() {
         className={styles.card}
         selectedPrefCodes={selectedPrefs}
         selectedTab={selectedTabs}
-        boderColor={borderColorClass}
+        boderColor={borderClass}
       />
     </main>
   );
