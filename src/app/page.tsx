@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import SwitchTabs from '@/components/ui/switchTabs/SwitchTabs';
-import Chart from '@/components/ui/charts/Chart';
+import Chart from '@/components/ui/chart/Chart';
 import styles from '@/app/page.module.css';
 
 export default function Page() {
