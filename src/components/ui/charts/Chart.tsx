@@ -90,23 +90,23 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
 
         const results = await Promise.all(promises);
 
-        const labelToShow = tabLabels[selectedTab];
+        const label = tabLabels[selectedTab];
         const categories = results[0].data.result.data[0].data.map((pt) => pt.year.toString());
 
         const series = results.map(({ prefCode, data }) => {
-          const targetData = data.result.data.find((d) => d.label === labelToShow);
+          const targetData = data.result.data.find((d) => d.label === label);
           if (!targetData) return null;
 
           return {
             name: prefMap[prefCode] || `都道府県 ${prefCode}`,
             type: 'line',
             data: targetData.data.map((pt) => pt.value),
-          };
-        })
+          }as Highcharts.SeriesOptionsType;
+        }).filter((s): s is Highcharts.SeriesOptionsType => s !== null);
 
         setOptions({
           title: {
-            text: `${labelToShow}の人口推移グラフ`,
+            text: `${label}の人口推移グラフ`,
           },
           xAxis: {
             categories,
