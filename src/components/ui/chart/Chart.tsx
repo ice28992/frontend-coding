@@ -41,21 +41,23 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
   const [prefMap, setPrefMap] = useState<Record<number, string>>({});
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-  // 初回に都道府県一覧を取得して、prefCode → prefName マップを作成
   useEffect(() => {
     const fetchPrefectures = async () => {
       try {
         const res = await fetch('https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures', {
-          headers: {
-            'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
-          },
+          headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '', },
         });
         const json = await res.json();
-        const map: Record<number, string> = {};
-        json.result.forEach((pref: Prefecture) => {
-          map[pref.prefCode] = pref.prefName;
-        });
-        setPrefMap(map);
+
+        if (json.result && Array.isArray(json.result)) {
+          const map: Record<number, string> = {};
+          json.result.forEach((pref: Prefecture) => {
+            map[pref.prefCode] = pref.prefName;
+          });
+          setPrefMap(map);
+        } else {
+          console.error('予期しないデータ形式が返されました:', json.result);
+        }
       } catch (err) {
         console.error('都道府県一覧の取得に失敗しました', err);
       }
@@ -63,6 +65,7 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
 
     fetchPrefectures();
   }, []);
+
 
   // グラフデータ取得
   useEffect(() => {
