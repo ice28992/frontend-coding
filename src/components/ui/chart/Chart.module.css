@@ -1,0 +1,10 @@
+.wrapper {
+  max-width: 90%;
+  margin: 10px auto 20px;
+}
+
+.text {
+  text-align: center;
+  font-weight: bold;
+  color: brown;
+}

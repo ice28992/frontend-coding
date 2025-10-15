@@ -1,0 +1,58 @@
+.prefCardHead {
+  padding-left: 1px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.textBox {
+  background-color: #c58b84;
+  border-radius: 5px;
+  padding: 10px;
+  width: 120px;
+  font-size: medium;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.checkAll {
+  background-color: #c8cfd0;
+  border: 1px solid #5d57598d;
+  border-radius: 5px;
+  padding: 2px;
+  width: 90px;
+  cursor: pointer;
+  color: #4b4848;
+  font-size: small;
+  font-weight: bold;
+}
+.checkAll:hover {
+  background-color: #adccd6;
+}
+
+.prefCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px #5d57598d solid;
+  border-radius: 5px;
+  background-color: #adccd6;
+  color: #4b4848;
+  font-weight: bold;
+}
+
+.prefGrid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 10px 10px;
+}
+
+/* スマホ表示 */
+@media (max-width: 640px) {
+  .prefGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px 7px;
+  }
+}
