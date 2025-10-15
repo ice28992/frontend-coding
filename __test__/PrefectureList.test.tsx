@@ -23,8 +23,9 @@ describe('PrefectureList Component', () => {
     selectChangeMock = jest.fn();
   });
 
+  // 都道府県データ取得・チェックボックスの表示テスト
   test('都道府県データを取得と一覧表示', async () => {
-    render(<PrefectureList selectChange={selectChangeMock} />);
+    render(<PrefectureList selectChange={selectChangeMock} defaultPrefs={[]} isOpen={true} />);
 
     expect(
       screen.getByRole('heading', { name: '都道府県一覧' })
@@ -36,9 +37,10 @@ describe('PrefectureList Component', () => {
     expect(tokyoCheckbox).toBeInTheDocument();
   });
 
+  // 都道府県ごとに選択・解除可能かテスト
   test('都道府県を選択・解除：selectChangeの呼び出し', async () => {
     const user = userEvent.setup();
-    render(<PrefectureList selectChange={selectChangeMock} />);
+    render(<PrefectureList selectChange={selectChangeMock} defaultPrefs={[]} isOpen={true} />);
 
     const tokyoCheckbox = await screen.findByLabelText('東京都');
     const hokkaidoCheckbox = await screen.findByLabelText('北海道');
@@ -56,27 +58,23 @@ describe('PrefectureList Component', () => {
     expect(selectChangeMock).toHaveBeenCalledWith([1]);
   });
 
+  // ボタンで全選択・全解除
   test('ボタン操作で全ての都道府県を選択・全解除できる', async () => {
     const user = userEvent.setup();
-    render(<PrefectureList selectChange={selectChangeMock} />);
-
-    await screen.findByText('北海道');
-    const selectAllButton = screen.getByRole('button', { name: '全選択' });
+    render(<PrefectureList selectChange={selectChangeMock} defaultPrefs={[]} isOpen={true} />);
 
     // 全選択
+    await screen.findByText('北海道');
+    const selectAllButton = screen.getByRole('button', { name: '全選択' });
     await user.click(selectAllButton);
     const allPrefCodes = MOCK_PREFECTURES.map((p) => p.prefCode);
     expect(selectChangeMock).toHaveBeenCalledWith(allPrefCodes);
 
-    // ボタンのテキスト：「全解除」に変化
+    // 全解除
     const deselectAllButton = screen.getByRole('button', { name: '全解除' });
     expect(deselectAllButton).toBeInTheDocument();
-
-    // 全解除
     await user.click(deselectAllButton);
     expect(selectChangeMock).toHaveBeenCalledWith([]);
-
-    // ボタンのテキスト：「全選択」に戻る
     expect(screen.getByRole('button', { name: '全選択' })).toBeInTheDocument();
   });
 });

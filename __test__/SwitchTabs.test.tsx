@@ -1,12 +1,13 @@
+import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { PrefectureList } from '@/components/ui/prefectureList/PrefectureList';
 import SwitchTabs from '@/components/ui/switchTabs/SwitchTabs';
-import React from 'react';
 
-jest.mock('@/components/ui/prefctureList/PrefectureList', () => ({
-  PrefectureList: jest.fn(({ selectChange }) => (
+jest.mock('@/components/ui/prefectureList/PrefectureList', () => ({
+  PrefectureList: jest.fn(({ selectChange, defaultSelected }) => (
     <div
       data-testid="mock-prefecture-list"
+      data-default-prefs={defaultSelected ? JSON.stringify(defaultSelected) : '[]'}  // defaultSelectedを渡す
       data-select-change={selectChange ? 'present' : 'missing'}
     />
   )),
@@ -53,5 +54,25 @@ describe('SwitchTabs Component', () => {
 
     expect(mockCheckPrefs).toHaveBeenCalledWith(selectedData);
     expect(mockCheckPrefs).toHaveBeenCalledTimes(1);
+  });
+
+  // カード開閉テスト
+  test('トグルボタン：カードの開閉ができる', async () => {
+    const user = userEvent.setup();
+    render(<SwitchTabs {...defaultProps} />);
+    const toggleButton = screen.getByRole('button', { name: '' });
+
+    // 初期状態: 開いている
+    let prefectureList = screen.getByTestId('mock-prefecture-list');
+    expect(prefectureList).toBeInTheDocument();
+
+    // 閉じる
+    await user.click(toggleButton);
+    expect(screen.queryByTestId('mock-prefecture-list')).not.toBeInTheDocument();
+
+    // 開く
+    await user.click(toggleButton);
+    prefectureList = screen.getByTestId('mock-prefecture-list');
+    expect(prefectureList).toBeInTheDocument();
   });
 });
