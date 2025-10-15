@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styles from './SwitchTabs.module.css';
 import { PrefectureList } from '../prefctureList/PrefectureList';
 
@@ -10,14 +9,11 @@ type Props = {
 
 
 const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs } : Props) => {
-  const [selectedPrefs, setSelectedPrefs] = useState<number[]>([]);
-
   const handleSwitchTab = (id: number) => {
     setSelectedTabs(id);
   };
 
   const handleSelect = (selected: number[]) => {
-    setSelectedPrefs(selected);
     checkPrefs(selected);
   };
 
