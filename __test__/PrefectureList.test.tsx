@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { PrefectureList } from '../src/components/ui/prefctureList/PrefectureList';
+import { PrefectureList } from '@/components/ui/prefctureList/PrefectureList';
 import '@testing-library/jest-dom';
 
 // APIレスポンスを模倣したモックデータ
