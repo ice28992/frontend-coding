@@ -7,7 +7,9 @@ jest.mock('@/components/ui/prefectureList/PrefectureList', () => ({
   PrefectureList: jest.fn(({ selectChange, defaultSelected }) => (
     <div
       data-testid="mock-prefecture-list"
-      data-default-prefs={defaultSelected ? JSON.stringify(defaultSelected) : '[]'}  // defaultSelectedを渡す
+      data-default-prefs={
+        defaultSelected ? JSON.stringify(defaultSelected) : '[]'
+      } // defaultSelectedを渡す
       data-select-change={selectChange ? 'present' : 'missing'}
     />
   )),
@@ -68,7 +70,9 @@ describe('SwitchTabs Component', () => {
 
     // 閉じる
     await user.click(toggleButton);
-    expect(screen.queryByTestId('mock-prefecture-list')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('mock-prefecture-list')
+    ).not.toBeInTheDocument();
 
     // 開く
     await user.click(toggleButton);

@@ -153,7 +153,12 @@ function Chart({
     fetchData();
   }, [selectedPrefCodes, selectedTab, prefMap]);
 
-  if (!options) return <p className={styles.text}>グラフを表示するには都道府県を選択してください</p>;
+  if (!options)
+    return (
+      <p className={styles.text}>
+        グラフを表示するには都道府県を選択してください
+      </p>
+    );
 
   return (
     <div className={`${styles.wrapper} ${className ?? ''} ${boderColor}`}>

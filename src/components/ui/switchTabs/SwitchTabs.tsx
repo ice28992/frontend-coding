@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IoIosArrowDropup, IoIosArrowDropdownCircle } from "react-icons/io";
+import { IoIosArrowDropup, IoIosArrowDropdownCircle } from 'react-icons/io';
 import { PrefectureList } from '../prefectureList/PrefectureList';
 import styles from './SwitchTabs.module.css';
 
@@ -13,14 +13,14 @@ type Props = {
 
 const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedPrefs, setSelectedPrefs] = useState<number[]>([]); 
+  const [selectedPrefs, setSelectedPrefs] = useState<number[]>([]);
 
   const handleSwitchTab = (id: number) => {
     setSelectedTabs(id);
   };
 
   const handleSelect = (selected: number[]) => {
-    setSelectedPrefs(selected); 
+    setSelectedPrefs(selected);
     checkPrefs(selected);
   };
 
@@ -40,7 +40,7 @@ const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs }: Props) => {
   };
 
   const toggleCard = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   return (
@@ -81,7 +81,11 @@ const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs }: Props) => {
         {/* Card */}
         {isOpen && (
           <div className={`${styles.card} ${tabColor()}`}>
-            <PrefectureList selectChange={handleSelect} defaultPrefs={selectedPrefs} isOpen={true} />
+            <PrefectureList
+              selectChange={handleSelect}
+              defaultPrefs={selectedPrefs}
+              isOpen={true}
+            />
           </div>
         )}
       </div>
