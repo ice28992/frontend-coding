@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IoIosArrowDropup, IoIosArrowDropdownCircle } from "react-icons/io";
-import { PrefectureList } from '../prefctureList/PrefectureList';
+import { PrefectureList } from '../prefectureList/PrefectureList';
 import styles from './SwitchTabs.module.css';
 
 type Props = {

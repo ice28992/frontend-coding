@@ -1,9 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { PrefectureList } from '@/components/ui/prefctureList/PrefectureList';
+import { PrefectureList } from '@/components/ui/prefectureList/PrefectureList';
 import SwitchTabs from '@/components/ui/switchTabs/SwitchTabs';
 import React from 'react';
 
-// モック化します。
 jest.mock('@/components/ui/prefctureList/PrefectureList', () => ({
   PrefectureList: jest.fn(({ selectChange }) => (
     <div
