@@ -10,6 +10,8 @@ type Prefecture = {
 
 type Props = {
   selectChange: (selected: number[]) => void;
+  initialSelectedPrefs: number[];
+  isOpen: boolean;
 };
 
 const getPrefData = async () => {
@@ -25,11 +27,12 @@ const getPrefData = async () => {
   return data.result;
 };
 
-export function PrefectureList({ selectChange }: Props) {
+export function PrefectureList({ selectChange, initialSelectedPrefs, isOpen }: Props) {
   const [pref, setPref] = useState<Prefecture[]>([]);
-  const [selectPref, setSelectPref] = useState<number[]>([]);
-  const [allSelecte, setAllSelecte] = useState(false);
+  const [selectPref, setSelectPref] = useState<number[]>(initialSelectedPrefs);  // 初期選択状態を反映
+  const [allSelecte, setAllSelecteLocal] = useState(false);  // ローカルで全選択状態を管理
 
+  // 都道府県データを取得する
   useEffect(() => {
     const getPref = async () => {
       try {
@@ -46,13 +49,19 @@ export function PrefectureList({ selectChange }: Props) {
     selectChange(selectPref);
   }, [selectPref, selectChange]);
 
+  useEffect(() => {
+    setSelectPref(initialSelectedPrefs);
+  }, [initialSelectedPrefs]);
+
   const handleCheckAll = () => {
     if (allSelecte) {
+      // 全解除
       setSelectPref([]);
     } else {
+      // 全選択
       setSelectPref(pref.map((p) => p.prefCode));
     }
-    setAllSelecte(!allSelecte);
+    setAllSelecteLocal(!allSelecte);
   };
 
   const handlePrefChange = (prefCode: number) => {
@@ -72,18 +81,20 @@ export function PrefectureList({ selectChange }: Props) {
         </button>
       </div>
 
-      <div className={styles.prefGrid}>
-        {pref.map((p) => (
-          <label key={p.prefCode} className={styles.prefCheckbox}>
-            <input
-              type="checkbox"
-              checked={selectPref.includes(p.prefCode)}
-              onChange={() => handlePrefChange(p.prefCode)}
-            />
-            {p.prefName}
-          </label>
-        ))}
-      </div>
+      {isOpen && (
+        <div className={styles.prefGrid}>
+          {pref.map((p) => (
+            <label key={p.prefCode} className={styles.prefCheckbox}>
+              <input
+                type="checkbox"
+                checked={selectPref.includes(p.prefCode)}
+                onChange={() => handlePrefChange(p.prefCode)}
+              />
+              {p.prefName}
+            </label>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

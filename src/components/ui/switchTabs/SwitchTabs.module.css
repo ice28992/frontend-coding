@@ -39,6 +39,18 @@
   background-color: #f5a623;
 }
 
+/* トグルボタン */
+.toggleButton {
+  margin-left: 5px;
+  border-color: #555;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.toggleButton:hover {
+  color: #c58b84;
+}
+
 /* カード */
 .card {
   border: 8px solid #c58b84;
@@ -76,6 +88,6 @@
 
   .card {
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 0px 10px 10px 10px;
   }
 }
