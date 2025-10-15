@@ -81,7 +81,7 @@ const SwitchTabs = ({ checkPrefs, selectedTabs, setSelectedTabs }: Props) => {
         {/* Card */}
         {isOpen && (
           <div className={`${styles.card} ${tabColor()}`}>
-            <PrefectureList selectChange={handleSelect} initialSelectedPrefs={selectedPrefs} isOpen={true} />
+            <PrefectureList selectChange={handleSelect} defaultPrefs={selectedPrefs} isOpen={true} />
           </div>
         )}
       </div>

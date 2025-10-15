@@ -10,7 +10,7 @@ type Prefecture = {
 
 type Props = {
   selectChange: (selected: number[]) => void;
-  initialSelectedPrefs: number[];
+  defaultPrefs: number[];
   isOpen: boolean;
 };
 
@@ -27,10 +27,10 @@ const getPrefData = async () => {
   return data.result;
 };
 
-export function PrefectureList({ selectChange, initialSelectedPrefs, isOpen }: Props) {
+export function PrefectureList({ selectChange, defaultPrefs, isOpen }: Props) {
   const [pref, setPref] = useState<Prefecture[]>([]);
-  const [selectPref, setSelectPref] = useState<number[]>(initialSelectedPrefs);  // 初期選択状態を反映
-  const [allSelecte, setAllSelecteLocal] = useState(false);  // ローカルで全選択状態を管理
+  const [selectPref, setSelectPref] = useState<number[]>(defaultPrefs);
+  const [allSelecte, setAllSelecteLocal] = useState(false);
 
   // 都道府県データを取得する
   useEffect(() => {
@@ -50,8 +50,8 @@ export function PrefectureList({ selectChange, initialSelectedPrefs, isOpen }: P
   }, [selectPref, selectChange]);
 
   useEffect(() => {
-    setSelectPref(initialSelectedPrefs);
-  }, [initialSelectedPrefs]);
+    setSelectPref(defaultPrefs);
+  }, [defaultPrefs]);
 
   const handleCheckAll = () => {
     if (allSelecte) {
