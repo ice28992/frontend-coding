@@ -36,7 +36,12 @@ type ApiResponse = {
 
 const tabLabels = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
 
-function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props) {
+function Chart({
+  className,
+  selectedPrefCodes,
+  selectedTab,
+  boderColor,
+}: Props) {
   const [options, setOptions] = useState<Highcharts.Options | null>(null);
   const [prefMap, setPrefMap] = useState<Record<number, string>>({});
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
@@ -44,9 +49,12 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
   useEffect(() => {
     const fetchPrefectures = async () => {
       try {
-        const res = await fetch('https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures', {
-          headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '', },
-        });
+        const res = await fetch(
+          'https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures',
+          {
+            headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '' },
+          }
+        );
         const json = await res.json();
 
         if (json.result && Array.isArray(json.result)) {
@@ -66,7 +74,6 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
     fetchPrefectures();
   }, []);
 
-
   // グラフデータ取得
   useEffect(() => {
     if (selectedPrefCodes.length == 0 || Object.keys(prefMap).length == 0) {
@@ -76,36 +83,45 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
 
     const fetchData = async () => {
       try {
-        const promises = selectedPrefCodes.map(async (prefCode) : Promise<{ prefCode: number; data: ApiResponse }> => {
-          const response = await fetch(
-            `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
-            {
-              headers: {
-                'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
-              },
-            }
-          );
+        const promises = selectedPrefCodes.map(
+          async (
+            prefCode
+          ): Promise<{ prefCode: number; data: ApiResponse }> => {
+            const response = await fetch(
+              `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
+              {
+                headers: {
+                  'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
+                },
+              }
+            );
 
-          if (!response.ok) throw new Error(`人口データの取得に失敗しました: ${prefCode}`);
-          const data = await response.json();
-          return { prefCode, data };
-        });
+            if (!response.ok)
+              throw new Error(`人口データの取得に失敗しました: ${prefCode}`);
+            const data = await response.json();
+            return { prefCode, data };
+          }
+        );
 
         const results = await Promise.all(promises);
 
         const label = tabLabels[selectedTab];
-        const categories = results[0].data.result.data[0].data.map((pt) => pt.year.toString());
+        const categories = results[0].data.result.data[0].data.map((pt) =>
+          pt.year.toString()
+        );
 
-        const series = results.map(({ prefCode, data }) => {
-          const targetData = data.result.data.find((d) => d.label === label);
-          if (!targetData) return null;
+        const series = results
+          .map(({ prefCode, data }) => {
+            const targetData = data.result.data.find((d) => d.label === label);
+            if (!targetData) return null;
 
-          return {
-            name: prefMap[prefCode] || `都道府県 ${prefCode}`,
-            type: 'line',
-            data: targetData.data.map((pt) => pt.value),
-          }as Highcharts.SeriesOptionsType;
-        }).filter((s): s is Highcharts.SeriesOptionsType => s !== null);
+            return {
+              name: prefMap[prefCode] || `都道府県 ${prefCode}`,
+              type: 'line',
+              data: targetData.data.map((pt) => pt.value),
+            } as Highcharts.SeriesOptionsType;
+          })
+          .filter((s): s is Highcharts.SeriesOptionsType => s !== null);
 
         setOptions({
           title: {
@@ -123,8 +139,8 @@ function Chart({ className, selectedPrefCodes, selectedTab, boderColor }: Props)
             layout: 'horizontal',
             align: 'center',
             verticalAlign: 'bottom',
-            itemStyle: { 
-              fontSize: '10px'
+            itemStyle: {
+              fontSize: '10px',
             },
           },
         });

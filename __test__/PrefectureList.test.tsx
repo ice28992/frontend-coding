@@ -77,8 +77,6 @@ describe('PrefectureList Component', () => {
     expect(selectChangeMock).toHaveBeenCalledWith([]);
 
     // ボタンのテキスト：「全選択」に戻る
-    expect(
-      screen.getByRole('button', { name: '全選択' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '全選択' })).toBeInTheDocument();
   });
 });

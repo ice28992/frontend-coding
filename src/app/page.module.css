@@ -6,7 +6,15 @@
   background-color: #fff;
 }
 
-.card-red { border-color: #C58B84; }
-.card-blue { border-color: #84BEC5; }
-.card-green { border-color: #84AF55; }
-.card-yellow { border-color: #F5A623; }
+.card-red {
+  border-color: #c58b84;
+}
+.card-blue {
+  border-color: #84bec5;
+}
+.card-green {
+  border-color: #84af55;
+}
+.card-yellow {
+  border-color: #f5a623;
+}

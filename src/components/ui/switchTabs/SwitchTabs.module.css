@@ -26,24 +26,40 @@
   opacity: 0.8;
 }
 
-.tab-red { background-color: #C58B84; }
-.tab-blue { background-color: #84BEC5; }
-.tab-green { background-color: #84AF55; }
-.tab-yellow { background-color: #F5A623; }
+.tab-red {
+  background-color: #c58b84;
+}
+.tab-blue {
+  background-color: #84bec5;
+}
+.tab-green {
+  background-color: #84af55;
+}
+.tab-yellow {
+  background-color: #f5a623;
+}
 
 /* カード */
 .card {
-  border: 8px solid #C58B84;
+  border: 8px solid #c58b84;
   border-radius: 0px 10px 10px 10px;
   padding: 20px;
   margin-bottom: 20px;
   font-size: small;
 }
 
-.card-red { border-color: #C58B84; }
-.card-blue { border-color: #84BEC5; }
-.card-green { border-color: #84AF55; }
-.card-yellow { border-color: #F5A623; }
+.card-red {
+  border-color: #c58b84;
+}
+.card-blue {
+  border-color: #84bec5;
+}
+.card-green {
+  border-color: #84af55;
+}
+.card-yellow {
+  border-color: #f5a623;
+}
 
 /* スマホ表示 */
 @media (max-width: 640px) {

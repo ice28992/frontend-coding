@@ -57,7 +57,7 @@ describe('Chart Component', () => {
   // 都道府県選択済みのテストケース
   test('都道府県が選択された場合：データ取得・グラフの表示', async () => {
     render(<Chart selectedPrefCodes={[13]} selectedTab={0} boderColor="" />);
-  
+
     await waitFor(() => {
       expect(screen.getByTestId('mock-chart')).toBeInTheDocument();
     });
@@ -74,7 +74,7 @@ describe('Chart Component', () => {
   });
 
   // 都道府県未選択のテストケース
-  test('都道府県が未選択の場合：選択を促すメッセージの表示・グラフ非表示', async() => {
+  test('都道府県が未選択の場合：選択を促すメッセージの表示・グラフ非表示', async () => {
     render(<Chart selectedPrefCodes={[]} selectedTab={0} boderColor="" />);
 
     await screen.findByText('グラフを表示するには都道府県を選択してください');
