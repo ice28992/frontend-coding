@@ -17,7 +17,7 @@
 - 本番環境URL: [frontend-coding-chi.vercel.app](frontend-coding-chi.vercel.app)
 
 ## 動作
-![alt text](動作.gif)
+![alt text](prev1.gif)
 
 ## 技術スタック
 
@@ -127,7 +127,7 @@
 - 都道府県の全選択/全解除ボタン
 - チェックボックス表示部分のみ折りたたみ機能でグラフの視認性向上
 
-![alt text](プレビュー.webp)
+![alt text](prev2.webp)
 
 ## Prefixについて
 コミットメッセージのPrefixは基本的に下記の通りとしています。
