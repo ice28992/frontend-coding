@@ -143,6 +143,9 @@ function Chart({
               fontSize: '10px',
             },
           },
+          accessibility: {
+            enabled: false  // アクセシビリティを無効化
+          },
         });
       } catch (error) {
         console.error('グラフデータ取得エラー', error);
