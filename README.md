@@ -17,7 +17,7 @@
 - 本番環境URL: [frontend-coding-chi.vercel.app](frontend-coding-chi.vercel.app)
 
 ## 動作
-![alt text](動作-1.gif)
+![alt text](動作.gif)
 
 ## 技術スタック
 
