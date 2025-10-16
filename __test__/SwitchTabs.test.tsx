@@ -61,7 +61,7 @@ describe('SwitchTabs Component', () => {
     expect(mockCheckPrefs).toHaveBeenCalledTimes(1);
   });
 
-  test('トグルボタンでカードが開閉し、PrefectureListがマウント/アンマウントされる', async () => {
+  test('トグルボタンでカードが開閉', async () => {
     const user = userEvent.setup();
     render(<SwitchTabs {...defaultProps} />);
     const toggleButton = screen.getByRole('button', { name: '' });
@@ -80,21 +80,20 @@ describe('SwitchTabs Component', () => {
     expect(prefectureList).toBeInTheDocument();
   });
 
-  test('カード開閉サイクル後も選択状態が維持され、再マウントされたPrefectureListに渡される', async () => {
+  test('カード開閉後：選択状態維持・PrefectureListにデータ渡し', async () => {
     const user = userEvent.setup();
     render(<SwitchTabs {...defaultProps} />);
     const toggleButton = screen.getByRole('button', { name: '' });
     const initialSelectedData = [4, 13, 27];
 
-    // 最初のマウント時、defaultPrefsは空配列であることを確認
+    // 初期状態：defaultPrefsは空配列であることを確認
     expect(MockedPrefectureList.mock.calls[0][0].defaultPrefs).toEqual([]);
 
-    // 選択データが発生し、SwitchTabsの内部状態を更新
+    // 選択：SwitchTabsの内部状態を更新
     const selectChangeHandler = MockedPrefectureList.mock.calls[0][0].selectChange;
     
-    // act() でラップして状態更新を同期的に処理
     await act(() => {
-        selectChangeHandler(initialSelectedData);
+      selectChangeHandler(initialSelectedData);
     });
 
     // カードを閉じる
