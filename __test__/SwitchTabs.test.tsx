@@ -1,23 +1,21 @@
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { render, screen, fireEvent } from '@testing-library/react';
 import { PrefectureList } from '@/components/ui/prefectureList/PrefectureList';
 import SwitchTabs from '@/components/ui/switchTabs/SwitchTabs';
+import React from 'react';
 
 jest.mock('@/components/ui/prefectureList/PrefectureList', () => ({
-  PrefectureList: jest.fn(({ selectChange, defaultSelected }) => (
+  PrefectureList: jest.fn(({ selectChange, defaultPrefs }) => (
     <div
       data-testid="mock-prefecture-list"
-      data-default-prefs={
-        defaultSelected ? JSON.stringify(defaultSelected) : '[]'
-      } // defaultSelectedを渡す
       data-select-change={selectChange ? 'present' : 'missing'}
+      data-default-prefs={JSON.stringify(defaultPrefs)}
     />
   )),
 }));
 
 const MockedPrefectureList = PrefectureList as jest.Mock;
 
-// テストで使用するモック関数を定義
 describe('SwitchTabs Component', () => {
   const mockCheckPrefs = jest.fn();
   const mockSetSelectedTabs = jest.fn();
@@ -29,37 +27,41 @@ describe('SwitchTabs Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    MockedPrefectureList.mockClear(); 
   });
 
-  // タブ切り替えテスト
-  test('タブを選択：setSelectedTabs呼び出し', () => {
+  // 全てのクリックイベントを userEvent.click に置き換えて act 警告を解消
+  test('タブを選択：setSelectedTabs呼び出し', async () => {
+    const user = userEvent.setup();
     render(<SwitchTabs {...defaultProps} />);
 
     const juniorTab = screen.getByRole('button', { name: '年少人口' });
-    fireEvent.click(juniorTab);
+    await user.click(juniorTab);
     expect(mockSetSelectedTabs).toHaveBeenCalledWith(1);
 
     const seniorTab = screen.getByRole('button', { name: '老年人口' });
-    fireEvent.click(seniorTab);
+    await user.click(seniorTab);
     expect(mockSetSelectedTabs).toHaveBeenCalledWith(3);
   });
 
-  // PrefectureListからのデータ受け取りテスト
-  test('都道府県選択データ取得：checkPrefsが呼び出し', () => {
+  test('都道府県選択データ取得：checkPrefsが呼び出し', async () => {
+ 
     render(<SwitchTabs {...defaultProps} />);
     expect(screen.getByTestId('mock-prefecture-list')).toBeInTheDocument();
 
     const selectedData = [1, 13, 47];
-    const selectChangeHandler =
-      MockedPrefectureList.mock.calls[0][0].selectChange;
-    selectChangeHandler(selectedData);
+    const selectChangeHandler = MockedPrefectureList.mock.calls[0][0].selectChange;
+    
+    // act() でラップして状態更新を同期的に処理
+    await act(() => {
+        selectChangeHandler(selectedData);
+    });
 
     expect(mockCheckPrefs).toHaveBeenCalledWith(selectedData);
     expect(mockCheckPrefs).toHaveBeenCalledTimes(1);
   });
 
-  // カード開閉テスト
-  test('トグルボタン：カードの開閉ができる', async () => {
+  test('トグルボタンでカードが開閉し、PrefectureListがマウント/アンマウントされる', async () => {
     const user = userEvent.setup();
     render(<SwitchTabs {...defaultProps} />);
     const toggleButton = screen.getByRole('button', { name: '' });
@@ -70,13 +72,41 @@ describe('SwitchTabs Component', () => {
 
     // 閉じる
     await user.click(toggleButton);
-    expect(
-      screen.queryByTestId('mock-prefecture-list')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('mock-prefecture-list')).not.toBeInTheDocument();
 
     // 開く
     await user.click(toggleButton);
     prefectureList = screen.getByTestId('mock-prefecture-list');
     expect(prefectureList).toBeInTheDocument();
+  });
+
+  test('カード開閉サイクル後も選択状態が維持され、再マウントされたPrefectureListに渡される', async () => {
+    const user = userEvent.setup();
+    render(<SwitchTabs {...defaultProps} />);
+    const toggleButton = screen.getByRole('button', { name: '' });
+    const initialSelectedData = [4, 13, 27];
+
+    // 最初のマウント時、defaultPrefsは空配列であることを確認
+    expect(MockedPrefectureList.mock.calls[0][0].defaultPrefs).toEqual([]);
+
+    // 選択データが発生し、SwitchTabsの内部状態を更新
+    const selectChangeHandler = MockedPrefectureList.mock.calls[0][0].selectChange;
+    
+    // act() でラップして状態更新を同期的に処理
+    await act(() => {
+        selectChangeHandler(initialSelectedData);
+    });
+
+    // カードを閉じる
+    await user.click(toggleButton); 
+    expect(screen.queryByTestId('mock-prefecture-list')).not.toBeInTheDocument();
+    
+    // カードを開く
+    await user.click(toggleButton); 
+    const secondMountCallProps = MockedPrefectureList.mock.calls.slice(-1)[0][0];
+    expect(secondMountCallProps.defaultPrefs).toEqual(initialSelectedData);
+
+    const reMountedPrefList = screen.getByTestId('mock-prefecture-list');
+    expect(reMountedPrefList.getAttribute('data-default-prefs')).toBe(JSON.stringify(initialSelectedData));
   });
 });
