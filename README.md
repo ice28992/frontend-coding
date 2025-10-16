@@ -9,10 +9,15 @@
 - コンポーネントの再利用性や視認性も意識した設計
 - Figma で事前に簡易設計を実施し、Atomic Design にも配慮
 
+- Figmaリンク：[フロントエンドコーディング試験](https://www.figma.com/design/SOGqrrZQQgbricSlpvVEbK/%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89?node-id=0-1&p=f&t=j4tbmMnEgcyFPff9-0)
+
 ## デプロイ
 
 - Vercelによって自動でデプロイを行なっています
 - 本番環境URL: [frontend-coding-chi.vercel.app](frontend-coding-chi.vercel.app)
+
+## 動作
+![alt text](動作-1.gif)
 
 ## 技術スタック
 
@@ -21,13 +26,13 @@
 |React            |19.1.0      | UIライブラリ               |
 |Next.js          |15.5.4      | フレームワーク              |
 |TypeScript       |5.9.3       | 型定義                     |
-|Tailwind CSS     |4.1.14      | CSS フレームワーク                |
-|highcharts       |12.4.0      | グラフ描画ライブラリ            |
-|React icons      |5.5.0       | アイコン                   |
-|ESLint           |9.37.0      | 静的コード解析          |
-|Prettier         |3.6.2       | コードフォーマッタ                 |
-|Testing Library  |16.3.0      | テストユーティリティ         |
-|ts-jest          |29.4.5      | JestでTypeScriptテスト                 |
+|Tailwind CSS     |4.1.14      | CSS フレームワーク           |
+|highcharts       |12.4.0      | グラフ描画ライブラリ          |
+|React icons      |5.5.0       | アイコン                     |
+|ESLint           |9.37.0      | 静的コード解析               |
+|Prettier         |3.6.2       | コードフォーマッタ            |
+|Testing Library  |16.3.0      | テストユーティリティ           |
+|ts-jest          |29.4.5      | JestでTypeScriptテスト       |
 
 ---
 
@@ -66,56 +71,100 @@
 1. jestとReact Testing Library依存関係のインストール
 
     ```bash
-    npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event jest-environment-jsdom
+    npm install --save-dev jest ts-jest @types/jest typescript
     ```
 
+2. テストの実行
 
+    ```bash
+    npm test
+    ```
 
+## テストコード
+テストコードを書く際に簡単なテストケース一覧を作成することに生成AI ChatGPTを用いた。
+また、ダミーデータとしてモック化しておく部分はGeminiを用いることで効率化した。
 
-## ディレクトリ構成
+>  1. Base.test.tsx：ヘッダーとフッターのテスト
+>  2. Chart.test.tsx：グラフ表示のテスト
+>  3. PrefectureList.test.tsx：都道府県一覧データ取得テスト
+>  4. SwitchTabs.test.tsx：タブ切り替えテスト
 
-```bash
-## ディレクトリ構成
+## テストケース
 
-```bash
-.
-├── __test__/               # 単体テストなどのテストコード群
-├── public/                 # 公開ファイル（icon）
-├── src/                    # ソースコードのルート
-│   ├── app/                # App Router用のページ構成
-│   │   ├── favicon.ico     # サイトアイコン
-│   │   ├── globals.css     # 全体のスタイル
-│   │   ├── layout.tsx      # アプリ全体のレイアウト定義
-│   │   ├── page.module.css # ページ固有のスタイル
-│   │   └── page.tsx        # エントリポイント
-│   └── components/         # コンポーネント群
-│       ├── base/           # ヘッダー・フッターコンポーネント
-│       └── ui/             # UIパーツ
-├── .env.local              # 環境変数ファイル
-├── .gitignore              # Git管理除外ファイル
-├── .prettierignore         # Prettier整形対象除外ファイル
-├── .prettierrc             # Prettier設定
-├── eslint.config.mjs       # ESLint設定
-├── jest.config.ts          # Jestの設定ファイル
-├── jest.setup.ts           # Jestのセットアップファイル
-├── next-env.d.ts           # Next.js 環境の型定義
-├── next.config.ts          # Next.js の設定ファイル
-├── package-lock.json       # npm依存関係ロックファイル
-├── package.json            # プロジェクト設定・依存一覧
-└── README.md               # プロジェクト概要
-```
+### SwitchTabs Component
+- タブを選択した際に、`setSelectedTabs` が呼び出される
+- 都道府県選択データが取得され、`checkPrefs` が呼び出される
+- トグルボタンでカードが開閉できる
+- カード開閉後、選択状態が維持され、`PrefectureList` にデータが渡される
 
----
+### PrefectureList Component
+- 都道府県データが正しく取得され、一覧表示されること
+- 都道府県を選択・解除した際に、`selectChange` が呼び出される
+- ボタン操作で、全ての都道府県を選択・解除できる
+
+### Chart Component
+- 都道府県が選択された場合、データが取得されグラフが表示される
+- 都道府県が未選択の場合、選択を促すメッセージが表示され、グラフが非表示になる
+
+### Base Component
+- ヘッダーコンポーネントが正しくレンダリングされる
+- フッターコンポーネントが正しくレンダリングされる
 
 ## 工夫した点・追加した機能
+
+### プログラム面での工夫
 - モバイルファースト設計・レスポンシブ対応
+- APIキーを.env.localに書くことでセキュリティ面に配慮
 - Atomic Design を意識したコンポーネント設計
 - 型安全性を担保するため、props に明示的な型定義を徹底
+- テスト時に pass 状況をコンソールに出力
 
-- 都道府県の全選択/全解除ボタン：一括選択/解除が手軽にできる
-- チェックボックス表示部分のみ折りたたみ機能：グラフの視認性向上
+### チーム開発想定の工夫
+- コミットメッセージに Prefix をつけて作業内容をわかりやすく
+- `main` と `develop` ブランチに分割し、安定した開発フローを確保
 
-## 今後の改善点
+### 追加できた機能
+- 都道府県の全選択/全解除ボタン
+- チェックボックス表示部分のみ折りたたみ機能でグラフの視認性向上
 
-- テストしやすいコードを意識的に書きたい
-- コンポーネントの Storybook 化
+![alt text](プレビュー.webp)
+
+## Prefixについて
+コミットメッセージのPrefixは基本的に下記の通りとしています。
+```
+feat: 新しい機能
+fix: バグの修正
+docs: ドキュメントのみの変更
+style: css関係
+refactor: 仕様に影響がないコード改善(リファクタ)
+chore: パッケージ更新など
+test: テスト関連
+change: 空白、フォーマット、セミコロン追加など
+add: ファイル・フォルダの追加
+```
+
+## 反省・改善点
+
+- テストしやすいコードを意識的に書きたかった
+- コンポーネントのStorybook化
+- スマホ表示で都道府県選択が多いとグラフ表示領域がかなり狭まってしまう
+- 初めてテストまで行ったため理解するのに時間がかかってしまった
+
+
+## 参考文献
+### ESLint, Pritter
+https://qiita.com/mysticatea/items/f523dab04a25f617c87d
+
+https://zenn.dev/aew2sbee/articles/nextjs-prettier
+
+https://zenn.dev/shimakaze_soft/articles/57642e22124968
+
+
+### Hightcharts
+https://zenn.dev/hitotori/articles/81792d51a4c767
+
+### React icons
+https://react-icons.github.io/react-icons/search/#q=arro
+
+### Jest
+https://qiita.com/okazuki/items/991a068892e946531612
