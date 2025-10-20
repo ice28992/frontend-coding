@@ -50,7 +50,7 @@ function Chart({
     const fetchPrefectures = async () => {
       try {
         const res = await fetch(
-          'https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/prefectures',
+          '/api/v1/prefectures',
           {
             headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '' },
           }
@@ -88,7 +88,7 @@ function Chart({
             prefCode
           ): Promise<{ prefCode: number; data: ApiResponse }> => {
             const response = await fetch(
-              `https://yumemi-frontend-engineer-codecheck-api.vercel.app/api/v1/population/composition/perYear?prefCode=${prefCode}`,
+              `/api/v1/population/composition/perYear?prefCode=${prefCode}`,
               {
                 headers: {
                   'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
@@ -144,7 +144,7 @@ function Chart({
             },
           },
           accessibility: {
-            enabled: false  // アクセシビリティを無効化
+            enabled: false
           },
         });
       } catch (error) {

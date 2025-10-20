@@ -1,7 +1,14 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://frontend-engineer-codecheck-api.mirai.yumemi.io/api/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
