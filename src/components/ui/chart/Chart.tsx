@@ -49,12 +49,9 @@ function Chart({
   useEffect(() => {
     const fetchPrefectures = async () => {
       try {
-        const res = await fetch(
-          '/api/v1/prefectures',
-          {
-            headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '' },
-          }
-        );
+        const res = await fetch('/api/proxyPref', {
+          headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '' },
+        });
         const json = await res.json();
 
         if (json.result && Array.isArray(json.result)) {
@@ -84,20 +81,12 @@ function Chart({
     const fetchData = async () => {
       try {
         const promises = selectedPrefCodes.map(
-          async (
-            prefCode
-          ): Promise<{ prefCode: number; data: ApiResponse }> => {
-            const response = await fetch(
-              `/api/v1/population/composition/perYear?prefCode=${prefCode}`,
-              {
-                headers: {
-                  'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
-                },
-              }
-            );
+          async (prefCode): Promise<{ prefCode: number; data: ApiResponse }> => {
+            const response = await fetch(`/api/proxyPop?prefCode=${prefCode}`, {
+              headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '', },
+            });
 
-            if (!response.ok)
-              throw new Error(`人口データの取得に失敗しました: ${prefCode}`);
+            if (!response.ok) throw new Error(`人口データの取得に失敗しました: ${prefCode}`);
             const data = await response.json();
             return { prefCode, data };
           }

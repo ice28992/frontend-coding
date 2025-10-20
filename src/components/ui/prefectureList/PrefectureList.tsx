@@ -15,12 +15,8 @@ type Props = {
 };
 
 const getPrefData = async () => {
-  const response = await fetch(
-    '/api/v1/prefectures',
-    {
-      headers: {
-        'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '',
-      },
+  const response = await fetch('/api/proxyPref', {
+    headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY || '', },
     }
   );
   const data = await response.json();
